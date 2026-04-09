@@ -1,0 +1,12 @@
+.board {
+  width: var(--container-width);
+  height: auto;
+  aspect-ratio: 1;
+  background-color: var(--color-brown-3);
+  border: none;
+  border-radius: rem(10);
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  padding: rem(16);
+  gap: rem(12);
+}

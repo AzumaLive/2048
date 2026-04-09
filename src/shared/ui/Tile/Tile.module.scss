@@ -1,0 +1,66 @@
+.tile {
+  position: relative;
+  background-color: var(--color-light-5);
+  border-radius: rem(6);
+  font-weight: 700;
+  font-size: rem(32);
+  color: var(--color-light-4);
+
+  &--2 {
+    background-color: var(--color-light-2);
+    color: var(--color-brown-2);
+  }
+
+  &--4 {
+    background-color: var(--color-light-3);
+    color: var(--color-brown-2);
+  }
+
+  &--8 {
+    background-color: var(--color-orange-1);
+  }
+
+  &--16 {
+    background-color: var(--color-orange-2);
+  }
+
+  &--32 {
+    background-color: var(--color-orange-3);
+  }
+
+  &--64 {
+    background-color: var(--color-orange-4);
+  }
+
+  &--128 {
+    background-color: var(--color-yellow-1);
+    font-size: rem(28);
+  }
+
+  &--256 {
+    background-color: var(--color-yellow-2);
+    font-size: rem(28);
+  }
+
+  &--528 {
+    background-color: var(--color-yellow-3);
+    font-size: rem(28);
+  }
+
+  &--1024 {
+    background-color: var(--color-yellow-4);
+    font-size: rem(24);
+  }
+
+  &--2048 {
+    background-color: var(--color-yellow-5);
+    font-size: rem(24);
+  }
+}
+
+.tileValue {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  translate: -50% -50%;
+}

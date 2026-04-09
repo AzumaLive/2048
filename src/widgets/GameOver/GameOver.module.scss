@@ -1,0 +1,19 @@
+.gameOver {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  top: 0;
+  left: 0;
+  background-color: #cdc0b480;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  row-gap: rem(104);
+}
+
+.title {
+  opacity: 1;
+  color: var(--color-brown-2);
+  font-size: rem(62);
+}

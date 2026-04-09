@@ -1,0 +1,15 @@
+.page {
+  margin-top: rem(100);
+  display: grid;
+  row-gap: rem(18);
+}
+
+.guide {
+  text-align: center;
+  font-size: rem(12);
+  color: var(--color-brown-3);
+}
+
+.gameArea {
+  position: relative;
+}

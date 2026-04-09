@@ -1,0 +1,16 @@
+.button {
+  background-color: var(--color-brown-1);
+  padding: rem(14) rem(28);
+  border-radius: rem(10);
+  border: none;
+  font-weight: 700;
+  font-size: rem(16);
+  color: var(--color-white);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.tryAgainButton {
+  padding: rem(12) rem(24);
+}

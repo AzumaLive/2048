@@ -1,0 +1,24 @@
+.gameInfo {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: rem(16) rem(12);
+}
+
+.title {
+  font-weight: 700;
+  font-size: rem(48);
+  color: var(--color-brown-2);
+}
+
+.subtitle {
+  font-size: rem(16);
+  color: var(--color-brown-2);
+  align-self: center;
+}
+
+.counters {
+  display: flex;
+  column-gap: rem(12);
+  align-items: center;
+  justify-content: center;
+}
