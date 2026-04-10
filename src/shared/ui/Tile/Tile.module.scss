@@ -1,10 +1,48 @@
+@keyframes appear {
+  from {
+    transform: scale(0);
+    opacity: 0;
+  }
+  to {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+@keyframes pop {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.1); }
+  100% { transform: scale(1); }
+}
+
 .tile {
-  position: relative;
+  position: absolute;
   background-color: var(--color-light-5);
   border-radius: rem(6);
   font-weight: 700;
   font-size: rem(32);
   color: var(--color-light-4);
+  width: calc((100% - rem(32) - rem(36)) / 4);
+  height: calc((100% - rem(32) - rem(36)) / 4);
+  left: calc(rem(16) + (var(--col) - 1) * ((100% - rem(32) - rem(36)) / 4 + rem(12)));
+  top: calc(rem(16) + (var(--row) - 1) * ((100% - rem(32) - rem(36)) / 4 + rem(12)));
+  transition: left 0.15s ease-out, top 0.15s ease-out;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1;
+
+  &:is(.new, .merged, .moving) {
+    z-index: 10;
+  }
+
+  &.new {
+    animation: appear 0.2s ease-out;
+  }
+
+  &.merged {
+    animation: pop 0.2s ease-out;
+  }
 
   &--2 {
     background-color: var(--color-light-2);
@@ -56,11 +94,4 @@
     background-color: var(--color-yellow-5);
     font-size: rem(24);
   }
-}
-
-.tileValue {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  translate: -50% -50%;
 }

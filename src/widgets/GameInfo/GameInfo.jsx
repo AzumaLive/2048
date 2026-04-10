@@ -9,11 +9,6 @@ const GameInfo = (props) => {
     bestScore,
   } = props
 
-  const onResetButtonClick = () => {
-    resetBoard()
-  }
-
-
   return (
     <div className={s.gameInfo}>
       <h1 className={s.title}>2048</h1>
@@ -22,7 +17,7 @@ const GameInfo = (props) => {
         <Counter value={bestScore}>BEST</Counter>
       </div>
       <h2 className={s.subtitle}>Join the tiles, get to 2048!</h2>
-      <Button onClick={onResetButtonClick}>New Game</Button>
+      <Button onClick={resetBoard}>New Game</Button>
     </div>
   );
 };

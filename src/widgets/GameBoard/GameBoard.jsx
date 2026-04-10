@@ -1,6 +1,6 @@
 import Tile from "@/shared/ui/Tile/Tile.jsx";
-import s from './GameBoard.module.scss'
 import {useEffect} from "react";
+import s from './GameBoard.module.scss'
 
 const GameBoard = (props) => {
   const {
@@ -32,10 +32,17 @@ const GameBoard = (props) => {
 
   return (
     <div className={s.board}>
-      {tiles.map((tile) => (
-        <Tile className={tile.className} value={tile.value} key={tile.key}></Tile>
+      {Array.from({ length: 16 }).map((_, i) => (
+        <div key={i} className={s.cell}></div>
       ))}
-
+      {tiles.map((tile) => (
+        <Tile
+          className={tile.className}
+          value={tile.value}
+          key={tile.id}
+          position={tile.position}
+        ></Tile>
+      ))}
     </div>
   );
 };

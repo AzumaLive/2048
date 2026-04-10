@@ -1,4 +1,4 @@
-import {useEffect, useState} from "react";
+import {useCallback, useEffect, useState} from "react";
 import gameStorage from '@/shared/api/gameStorage.js'
 
 const useGameBoard = () => {
@@ -18,19 +18,29 @@ const useGameBoard = () => {
     })
 
     const randomIndex = emptyTilesIndexes[Math.floor(Math.random() * emptyTilesIndexes.length)]
-    tiles[randomIndex] = { className: "tile--2", value: 2, key: crypto?.randomUUID() ?? Date.now().toString() }
+    tiles[randomIndex] = {
+      ...tiles[randomIndex],
+      className: "new",
+      value: 2,
+      id: crypto?.randomUUID() ?? Date.now().toString(),
+    }
 
     return tiles
   }
 
-  const initialTile = () => {
-    return { className: "", value: null, key: crypto?.randomUUID() ?? Date.now().toString() }
+  const initialTile = (position) => {
+    return {
+      className: null,
+      value: null,
+      id: crypto?.randomUUID() ?? Date.now().toString(),
+      position,
+    }
   }
 
   const initialTiles = () => {
     let tiles = []
     for (let i = 0; i < 16; ++i) {
-      tiles.push(initialTile())
+      tiles.push(initialTile(i+1))
     }
     return setRandomTile(tiles)
   }
@@ -39,192 +49,187 @@ const useGameBoard = () => {
   const [score, setScore] = useState(savedScore ?? 0)
   const [bestScore, setBestScore] = useState(savedBestScore ?? 0)
 
-  const moveRowToRight = (tiles, end) => {
-    let i = end
-    let moved = false
-    while (i > end-4) {
-      if (tiles[i].value) {
-        for (let j = i+1; j <= end && !tiles[j].value; ++j) {
-          tiles[j] = tiles[j-1]
-          tiles[j-1] = initialTile()
-          moved = true
-        }
-      }
-      i--
-    }
-    return moved
-  }
-
-  const moveRowToLeft = (tiles, start) => {
-    let i = start
-    let moved = false
-    while (i < start+4) {
-      if (tiles[i].value) {
-        for (let j = i-1; j >= start && !tiles[j].value; --j) {
-          tiles[j] = tiles[j+1]
-          tiles[j+1] = initialTile()
-          moved = true
-        }
-      }
-      i++
-    }
-    return moved
-  }
-
-  const moveColumnDown = (tiles, col) => {
-    let i = 12 + col
-    let moved = false
-    while (i >= col) {
-      if (tiles[i].value) {
-        for (let j = i+4; j <= 12+col && !tiles[j].value; j+=4) {
-          tiles[j] = tiles[j-4]
-          tiles[j-4] = initialTile()
-          moved = true
-        }
-      }
-      i -= 4
-    }
-    return moved
-  }
-
-  const moveColumnUp = (tiles, col) => {
-    let i = col
-    let moved = false
-    while (i <= 12 + col) {
-      if (tiles[i].value) {
-        for (let j = i-4; j >= col && !tiles[j].value; j-=4) {
-          tiles[j] = tiles[j+4]
-          tiles[j+4] = initialTile()
-          moved = true
-        }
-      }
-      i += 4
-    }
-    return moved
-  }
-
-  const onRightArrowDown = () => {
+  const moveAndMerge = (tiles, getLine, setLine) => {
+    let hasChanged = false
     let scoreToAdd = 0
 
-    setTiles(prevTiles => {
-      let newTiles = prevTiles.map(tile => ({...tile}))
-      let hasChanged = false
+    for (let lineIdx = 0; lineIdx < 4; lineIdx++) {
+      const line = getLine(tiles, lineIdx)
+      const values = line.map(t => t.value)
+      const positions = line.map(t => t.position)
 
-      for (let i = 3; i < 16; i+=4) {
-        if (moveRowToRight(newTiles, i)) hasChanged = true
-        for (let j = i; j > i-3; --j) {
-          if (newTiles[j].value && newTiles[j-1].value && newTiles[j].value === newTiles[j-1].value) {
-            const mergedValue = newTiles[j-1].value * 2
-            newTiles[j] = {
-              className: `tile--${mergedValue}`,
-              value: mergedValue,
-              key: crypto?.randomUUID() ?? Date.now().toString()
-            }
-            newTiles[j-1] = initialTile()
-            scoreToAdd += mergedValue
-            hasChanged = true
+      const nonZeroValues = []
+      const nonZeroIds = []
+
+      line.forEach(t => {
+        if (t.value) {
+          nonZeroValues.push(t.value)
+          nonZeroIds.push(t.id)
+        }
+      })
+
+      const merged = []
+      const mergedIds = []
+      const mergedFlags = []
+      let i = 0
+
+      while (i < nonZeroValues.length) {
+        if (i + 1 < nonZeroValues.length && nonZeroValues[i] === nonZeroValues[i + 1]) {
+          merged.push(nonZeroValues[i] * 2)
+          mergedIds.push(crypto?.randomUUID() ?? Date.now().toString())
+          mergedFlags.push(true)
+          scoreToAdd += nonZeroValues[i] * 2
+          i += 2
+        } else {
+          merged.push(nonZeroValues[i])
+          mergedIds.push(nonZeroIds[i])
+          mergedFlags.push(false)
+          i++
+        }
+      }
+
+      while (merged.length < 4) {
+        merged.push(null)
+        mergedIds.push(null)
+        mergedFlags.push(false)
+      }
+
+      if (JSON.stringify(values) !== JSON.stringify(merged)) {
+        hasChanged = true
+      }
+
+      const newLine = merged.map((value, idx) => {
+        if (value) {
+          const isMerged = mergedFlags[idx]
+          const isMoving = line[idx] !== positions[idx]
+
+          return {
+            id: mergedIds[idx],
+            value,
+            position: positions[idx],
+            className: isMerged ? "merged" : (isMoving ? "moving" : null)
           }
         }
-        if (moveRowToRight(newTiles, i)) hasChanged = true
-      }
-      newTiles = hasChanged ? setRandomTile(newTiles) : newTiles
-      saveTiles(newTiles)
-      return newTiles
-    })
-    setScore(prevScore => prevScore + scoreToAdd)
+        return initialTile(positions[idx])
+      })
+
+      setLine(tiles, lineIdx, newLine)
+    }
+
+    return { hasChanged, scoreToAdd }
   }
 
-  const onLeftArrowDown = () => {
-    let scoreToAdd = 0
-
+  const onRightArrowDown = useCallback(() => {
     setTiles(prevTiles => {
-      let newTiles = prevTiles.map(tile => ({...tile}))
-      let hasChanged = false
-
-      for (let i = 0; i < 16; i+=4) {
-        if (moveRowToLeft(newTiles, i)) hasChanged = true
-        for (let j = i; j < i+3; ++j) {
-          if (newTiles[j].value && newTiles[j+1].value && newTiles[j].value === newTiles[j+1].value) {
-            const mergedValue = newTiles[j+1].value * 2
-            newTiles[j] = {
-              className: `tile--${mergedValue}`,
-              value: mergedValue,
-              key: crypto?.randomUUID() ?? Date.now().toString()
-            }
-            newTiles[j+1] = initialTile()
-            scoreToAdd += mergedValue
-            hasChanged = true
-          }
+      const newTiles = [...prevTiles]
+      const { hasChanged, scoreToAdd } = moveAndMerge(
+        newTiles,
+        (tiles, row) => {
+          const start = row * 4
+          return [tiles[start + 3], tiles[start + 2], tiles[start + 1], tiles[start]]
+        },
+        (tiles, row, line) => {
+          const start = row * 4
+          tiles[start + 3] = line[0]
+          tiles[start + 2] = line[1]
+          tiles[start + 1] = line[2]
+          tiles[start] = line[3]
         }
-        if (moveRowToLeft(newTiles, i)) hasChanged = true
+      )
+
+      if (hasChanged) {
+        setScore(prev => prev + scoreToAdd)
+        return setRandomTile(newTiles)
       }
-      newTiles = hasChanged ? setRandomTile(newTiles) : newTiles
-      saveTiles(newTiles)
-      return newTiles
+      return prevTiles
     })
-    setScore(prevScore => prevScore + scoreToAdd)
-  }
+  }, [])
 
-  const onDownArrowDown = () => {
-    let scoreToAdd = 0
-
+  const onLeftArrowDown = useCallback(() => {
     setTiles(prevTiles => {
-      let newTiles = prevTiles.map(tile => ({...tile}))
-      let hasChanged = false
-
-      for (let col = 0; col < 4; col++) {
-        if (moveColumnDown(newTiles, col)) hasChanged = true
-        for (let j = 12+col; j > col; j-=4) {
-          if (newTiles[j].value && newTiles[j-4].value && newTiles[j].value === newTiles[j-4].value) {
-            const mergedValue = newTiles[j-4].value * 2
-            newTiles[j] = {
-              className: `tile--${mergedValue}`,
-              value: mergedValue,
-              key: crypto?.randomUUID() ?? Date.now().toString()
-            }
-            newTiles[j-4] = initialTile()
-            scoreToAdd += mergedValue
-            hasChanged = true
-          }
+      const newTiles = [...prevTiles]
+      const { hasChanged, scoreToAdd } = moveAndMerge(
+        newTiles,
+        (tiles, row) => {
+          const start = row * 4
+          return [tiles[start], tiles[start + 1], tiles[start + 2], tiles[start + 3]]
+        },
+        (tiles, row, line) => {
+          const start = row * 4
+          tiles[start] = line[0]
+          tiles[start + 1] = line[1]
+          tiles[start + 2] = line[2]
+          tiles[start + 3] = line[3]
         }
-        if (moveColumnDown(newTiles, col)) hasChanged = true
+      )
+
+      if (hasChanged) {
+        setScore(prev => prev + scoreToAdd)
+        return setRandomTile(newTiles)
       }
-      newTiles = hasChanged ? setRandomTile(newTiles) : newTiles
-      return newTiles
+      return prevTiles
     })
-    setScore(prevScore => prevScore + scoreToAdd)
-  }
+  }, [])
 
-  const onUpArrowDown = () => {
-    let scoreToAdd = 0
-
+  const onDownArrowDown = useCallback(() => {
     setTiles(prevTiles => {
-      let newTiles = prevTiles.map(tile => ({...tile}))
-      let hasChanged = false
-
-      for (let col = 0; col < 4; col++) {
-        if (moveColumnUp(newTiles, col)) hasChanged = true
-        for (let j = col; j < 12+col; j+=4) {
-          if (newTiles[j].value && newTiles[j+4].value && newTiles[j].value === newTiles[j+4].value) {
-            const mergedValue = newTiles[j+4].value * 2
-            newTiles[j] = {
-              className: `tile--${mergedValue}`,
-              value: mergedValue,
-              key: crypto?.randomUUID() ?? Date.now().toString()
-            }
-            newTiles[j+4] = initialTile()
-            scoreToAdd += mergedValue
-            hasChanged = true
-          }
+      const newTiles = [...prevTiles]
+      const { hasChanged, scoreToAdd } = moveAndMerge(
+        newTiles,
+        (tiles, col) => [tiles[12 + col], tiles[8 + col], tiles[4 + col], tiles[col]],
+        (tiles, col, line) => {
+          tiles[12 + col] = line[0]
+          tiles[8 + col] = line[1]
+          tiles[4 + col] = line[2]
+          tiles[col] = line[3]
         }
-        if (moveColumnUp(newTiles, col)) hasChanged = true
+      )
+
+      if (hasChanged) {
+        setScore(prev => prev + scoreToAdd)
+        return setRandomTile(newTiles)
       }
-      newTiles = hasChanged ? setRandomTile(newTiles) : newTiles
-      saveTiles(newTiles)
-      return newTiles
+      return prevTiles
     })
-    setScore(prevScore => prevScore + scoreToAdd)
-  }
+  }, [])
+
+  const onUpArrowDown = useCallback(() => {
+    setTiles(prevTiles => {
+      const newTiles = [...prevTiles]
+      const { hasChanged, scoreToAdd } = moveAndMerge(
+        newTiles,
+        (tiles, col) => [tiles[col], tiles[4 + col], tiles[8 + col], tiles[12 + col]],
+        (tiles, col, line) => {
+          tiles[col] = line[0]
+          tiles[4 + col] = line[1]
+          tiles[8 + col] = line[2]
+          tiles[12 + col] = line[3]
+        }
+      )
+
+      if (hasChanged) {
+        setScore(prev => prev + scoreToAdd)
+        return setRandomTile(newTiles)
+      }
+      return prevTiles
+    })
+  }, [])
+
+  const isGameOver = useCallback((tiles) => {
+    for (let i = 1; i <= 16; ++i) {
+      if (!tiles[i-1].value
+        || (i % 4 > 0 && tiles[i-1].value === tiles[i].value)
+        || (i < 13 && tiles[i-1].value === tiles[i+3].value)) {
+        return false
+      }
+    }
+    return true
+  }, [])
+
+  const resetBoard = useCallback(() => {
+    setTiles(initialTiles())
+    setScore(0)
+  }, [])
 
   useEffect(() => {
     saveTiles(tiles)
@@ -238,23 +243,6 @@ const useGameBoard = () => {
     }
   }, [score]);
 
-  const isGameOver = (tiles) => {
-    for (let i = 1; i <= 16; ++i) {
-      if (!tiles[i-1].value
-        || (i % 4 > 0 && tiles[i-1].value === tiles[i].value)
-        || (i < 13 && tiles[i-1].value === tiles[i+3].value)) {
-        return false
-      }
-    }
-    return true
-  }
-
-  const resetBoard = () => {
-    setTiles(initialTiles())
-    saveTiles(initialTiles())
-    setScore(0)
-    saveScore(0)
-  }
 
   return {
     tiles,
