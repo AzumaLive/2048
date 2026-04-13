@@ -1,9 +1,9 @@
-import Button from "@/shared/ui/Button/index.js";
+import Button from "@/shared/ui/Button";
 import s from './GameOver.module.scss'
 
 const GameOver = (props) => {
   const {
-    resetBoard,
+    onReset,
   } = props
 
   return (
@@ -11,7 +11,7 @@ const GameOver = (props) => {
       <h3 className={s.title}>Game over!</h3>
       <Button
         className="tryAgainButton"
-        onClick={resetBoard}
+        onClick={onReset}
       >Try again</Button>
     </div>
   );

@@ -4,7 +4,7 @@ import Counter from "@/shared/ui/Counter";
 
 const GameInfo = (props) => {
   const {
-    resetBoard,
+    onReset,
     score,
     bestScore,
   } = props
@@ -17,7 +17,7 @@ const GameInfo = (props) => {
         <Counter value={bestScore}>BEST</Counter>
       </div>
       <h2 className={s.subtitle}>Join the tiles, get to 2048!</h2>
-      <Button onClick={resetBoard}>New Game</Button>
+      <Button onClick={onReset}>New Game</Button>
     </div>
   );
 };

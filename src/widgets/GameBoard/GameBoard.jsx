@@ -1,18 +1,21 @@
-import Tile from "@/shared/ui/Tile/Tile.jsx";
 import {useEffect} from "react";
+import Tile from "@/shared/ui/Tile/Tile.jsx";
 import s from './GameBoard.module.scss'
 
 const GameBoard = (props) => {
   const {
     tiles,
-    arrowDownHandler,
+    onMove,
   } = props
 
   useEffect(() => {
-    window.addEventListener('keydown', arrowDownHandler)
+    const handelKeyDown = (event) => {
+      onMove(event.code)
+    }
 
-    return () => window.removeEventListener('keydown', arrowDownHandler);
-  }, [])
+    window.addEventListener('keydown', handelKeyDown)
+    return () => window.removeEventListener('keydown', handelKeyDown);
+  }, [onMove])
 
   return (
     <div className={s.board}>

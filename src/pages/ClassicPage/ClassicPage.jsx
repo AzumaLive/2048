@@ -1,7 +1,7 @@
 import GameInfo from "@/widgets/GameInfo";
 import GameBoard from "@/widgets/GameBoard";
-import useGameBoard from "@/entities/game/module/useGameBoard.js";
 import GameOver from "@/widgets/GameOver";
+import {useGameSession} from "@/features/game-session";
 import s from './ClassicPage.module.scss'
 
 const ClassicPage = () => {
@@ -9,26 +9,29 @@ const ClassicPage = () => {
     tiles,
     score,
     bestScore,
-    resetBoard,
-    arrowDownHandler,
+    resetGame,
+    handleMove,
     isGameOver,
-  } = useGameBoard()
+  } = useGameSession()
 
   return (
     <div className={`container ${s.page}`}>
       <GameInfo
-        resetBoard={resetBoard}
+        onReset={resetGame}
         score={score}
         bestScore={bestScore}
       />
       <div className={`container ${s.gameArea}`}>
         <GameBoard
           tiles={tiles}
-          arrowDownHandler={arrowDownHandler}
+          onMove={handleMove}
         />
-        {isGameOver(tiles) && <GameOver resetBoard={resetBoard}/>}
+        {isGameOver && <GameOver onReset={resetGame}/>}
       </div>
-      <p className={s.guide}>How to play: Use arrow keys to move tiles.<br/>Tiles with the same number merge when they touch.</p>
+      <p className={s.guide}>
+        How to play: Use arrow keys to move tiles.<br/>
+        Tiles with the same number merge when they touch.
+      </p>
     </div>
   );
 };
