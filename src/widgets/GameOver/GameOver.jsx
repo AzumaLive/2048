@@ -6,17 +6,12 @@ const GameOver = (props) => {
     resetBoard,
   } = props
 
-  const onTryAgainButtonClick = () => {
-    resetBoard()
-
-  }
-
   return (
     <div className={s.gameOver}>
       <h3 className={s.title}>Game over!</h3>
       <Button
         className="tryAgainButton"
-        onClick={onTryAgainButtonClick}
+        onClick={resetBoard}
       >Try again</Button>
     </div>
   );

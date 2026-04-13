@@ -1,6 +1,6 @@
 import GameInfo from "@/widgets/GameInfo";
 import GameBoard from "@/widgets/GameBoard";
-import useGameBoard from "@/entities/useGameBoard.js";
+import useGameBoard from "@/entities/game/module/useGameBoard.js";
 import GameOver from "@/widgets/GameOver";
 import s from './ClassicPage.module.scss'
 
@@ -10,10 +10,7 @@ const ClassicPage = () => {
     score,
     bestScore,
     resetBoard,
-    onRightArrowDown,
-    onLeftArrowDown,
-    onDownArrowDown,
-    onUpArrowDown,
+    arrowDownHandler,
     isGameOver,
   } = useGameBoard()
 
@@ -27,10 +24,7 @@ const ClassicPage = () => {
       <div className={`container ${s.gameArea}`}>
         <GameBoard
           tiles={tiles}
-          onRightArrowDown={onRightArrowDown}
-          onLeftArrowDown={onLeftArrowDown}
-          onDownArrowDown={onDownArrowDown}
-          onUpArrowDown={onUpArrowDown}
+          arrowDownHandler={arrowDownHandler}
         />
         {isGameOver(tiles) && <GameOver resetBoard={resetBoard}/>}
       </div>

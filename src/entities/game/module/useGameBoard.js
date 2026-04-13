@@ -12,20 +12,21 @@ const useGameBoard = () => {
   } = gameStorage()
 
   const setRandomTile = (tiles) => {
+    let newTiles = [...tiles]
     let emptyTilesIndexes = []
-    tiles.forEach(({ value }, index) => {
+    newTiles.forEach(({ value }, index) => {
       if (!value) emptyTilesIndexes.push(index)
     })
 
     const randomIndex = emptyTilesIndexes[Math.floor(Math.random() * emptyTilesIndexes.length)]
-    tiles[randomIndex] = {
+    newTiles[randomIndex] = {
       ...tiles[randomIndex],
       className: "new",
       value: 2,
       id: crypto?.randomUUID() ?? Date.now().toString(),
     }
 
-    return tiles
+    return newTiles
   }
 
   const initialTile = (position) => {
@@ -48,6 +49,54 @@ const useGameBoard = () => {
   const [tiles, setTiles] = useState(savedTiles ?? initialTiles())
   const [score, setScore] = useState(savedScore ?? 0)
   const [bestScore, setBestScore] = useState(savedBestScore ?? 0)
+
+  const getRow = (tiles, rowNum) => {
+    const start = rowNum * 4
+    return [tiles[start], tiles[start + 1], tiles[start + 2], tiles[start + 3]]
+  }
+
+  const getReversedRow = (tiles, rowNum) => {
+    const start = rowNum * 4
+    return [tiles[start + 3], tiles[start + 2], tiles[start + 1], tiles[start]]
+  }
+
+  const getCol = (tiles, colNum) => {
+    return [tiles[colNum], tiles[4 + colNum], tiles[8 + colNum], tiles[12 + colNum]]
+  }
+
+  const getReversedCol = (tiles, colNum) => {
+    return [tiles[12 + colNum], tiles[8 + colNum], tiles[4 + colNum], tiles[colNum]]
+  }
+
+  const setRow = (tiles, row, line) => {
+    const start = row * 4
+    tiles[start] = line[0]
+    tiles[start + 1] = line[1]
+    tiles[start + 2] = line[2]
+    tiles[start + 3] = line[3]
+  }
+
+  const setReversedRow = (tiles, row, line) => {
+    const start = row * 4
+    tiles[start + 3] = line[0]
+    tiles[start + 2] = line[1]
+    tiles[start + 1] = line[2]
+    tiles[start] = line[3]
+  }
+
+  const setCol = (tiles, col, line) => {
+    tiles[col] = line[0]
+    tiles[4 + col] = line[1]
+    tiles[8 + col] = line[2]
+    tiles[12 + col] = line[3]
+  }
+
+  const setReversedCol = (tiles, col, line) => {
+    tiles[12 + col] = line[0]
+    tiles[8 + col] = line[1]
+    tiles[4 + col] = line[2]
+    tiles[col] = line[3]
+  }
 
   const moveAndMerge = (tiles, getLine, setLine) => {
     let hasChanged = false
@@ -119,92 +168,35 @@ const useGameBoard = () => {
     return { hasChanged, scoreToAdd }
   }
 
-  const onRightArrowDown = useCallback(() => {
+  const arrowDownHandler = useCallback((event) => {
+    let getter, setter
+    switch (event.code) {
+      case "ArrowRight":
+        getter = getReversedRow
+        setter = setReversedRow
+        break
+      case "ArrowLeft":
+        getter = getRow
+        setter = setRow
+        break
+      case "ArrowUp":
+        getter = getCol
+        setter = setCol
+        break
+      case "ArrowDown":
+        getter = getReversedCol
+        setter = setReversedCol
+        break
+      default:
+        return
+    }
     setTiles(prevTiles => {
       const newTiles = [...prevTiles]
+
       const { hasChanged, scoreToAdd } = moveAndMerge(
         newTiles,
-        (tiles, row) => {
-          const start = row * 4
-          return [tiles[start + 3], tiles[start + 2], tiles[start + 1], tiles[start]]
-        },
-        (tiles, row, line) => {
-          const start = row * 4
-          tiles[start + 3] = line[0]
-          tiles[start + 2] = line[1]
-          tiles[start + 1] = line[2]
-          tiles[start] = line[3]
-        }
-      )
-
-      if (hasChanged) {
-        setScore(prev => prev + scoreToAdd)
-        return setRandomTile(newTiles)
-      }
-      return prevTiles
-    })
-  }, [])
-
-  const onLeftArrowDown = useCallback(() => {
-    setTiles(prevTiles => {
-      const newTiles = [...prevTiles]
-      const { hasChanged, scoreToAdd } = moveAndMerge(
-        newTiles,
-        (tiles, row) => {
-          const start = row * 4
-          return [tiles[start], tiles[start + 1], tiles[start + 2], tiles[start + 3]]
-        },
-        (tiles, row, line) => {
-          const start = row * 4
-          tiles[start] = line[0]
-          tiles[start + 1] = line[1]
-          tiles[start + 2] = line[2]
-          tiles[start + 3] = line[3]
-        }
-      )
-
-      if (hasChanged) {
-        setScore(prev => prev + scoreToAdd)
-        return setRandomTile(newTiles)
-      }
-      return prevTiles
-    })
-  }, [])
-
-  const onDownArrowDown = useCallback(() => {
-    setTiles(prevTiles => {
-      const newTiles = [...prevTiles]
-      const { hasChanged, scoreToAdd } = moveAndMerge(
-        newTiles,
-        (tiles, col) => [tiles[12 + col], tiles[8 + col], tiles[4 + col], tiles[col]],
-        (tiles, col, line) => {
-          tiles[12 + col] = line[0]
-          tiles[8 + col] = line[1]
-          tiles[4 + col] = line[2]
-          tiles[col] = line[3]
-        }
-      )
-
-      if (hasChanged) {
-        setScore(prev => prev + scoreToAdd)
-        return setRandomTile(newTiles)
-      }
-      return prevTiles
-    })
-  }, [])
-
-  const onUpArrowDown = useCallback(() => {
-    setTiles(prevTiles => {
-      const newTiles = [...prevTiles]
-      const { hasChanged, scoreToAdd } = moveAndMerge(
-        newTiles,
-        (tiles, col) => [tiles[col], tiles[4 + col], tiles[8 + col], tiles[12 + col]],
-        (tiles, col, line) => {
-          tiles[col] = line[0]
-          tiles[4 + col] = line[1]
-          tiles[8 + col] = line[2]
-          tiles[12 + col] = line[3]
-        }
+        getter,
+        setter
       )
 
       if (hasChanged) {
@@ -243,17 +235,13 @@ const useGameBoard = () => {
     }
   }, [score]);
 
-
   return {
     tiles,
     score,
     bestScore,
     resetBoard,
     setScore,
-    onRightArrowDown,
-    onLeftArrowDown,
-    onDownArrowDown,
-    onUpArrowDown,
+    arrowDownHandler,
     isGameOver,
   }
 }
