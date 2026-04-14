@@ -2,9 +2,9 @@ import GameInfo from "@/widgets/GameInfo";
 import GameBoard from "@/widgets/GameBoard";
 import GameOver from "@/widgets/GameOver";
 import {useGameSession} from "@/features/game-session";
-import s from './ClassicPage.module.scss'
+import s from './ClassicModePage.module.scss'
 
-const ClassicPage = () => {
+const ClassicModePage = () => {
   const {
     tiles,
     score,
@@ -15,7 +15,7 @@ const ClassicPage = () => {
   } = useGameSession()
 
   return (
-    <div className={`container ${s.page}`}>
+    <div className={`container container--game ${s.page}`}>
       <GameInfo
         onReset={resetGame}
         score={score}
@@ -36,4 +36,4 @@ const ClassicPage = () => {
   );
 };
 
-export default ClassicPage;
+export default ClassicModePage;

@@ -12,6 +12,13 @@
 }
 
 .container {
-  max-width: var(--container-width);
-  margin: 0 auto;
+  margin-inline: auto;
+
+  &--menu {
+    max-width: var(--menu-container-width);
+  }
+
+  &--game {
+    max-width: var(--game-container-width);
+  }
 }

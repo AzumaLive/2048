@@ -17,11 +17,11 @@
 
 .tile {
   position: absolute;
-  background-color: var(--color-light-5);
+  background-color: var(--color-bg-tile-empty);
   border-radius: rem(6);
   font-weight: 700;
   font-size: rem(32);
-  color: var(--color-light-4);
+  color: var(--color-text-on-light);
   width: calc((100% - rem(32) - rem(36)) / 4);
   height: calc((100% - rem(32) - rem(36)) / 4);
   left: calc(rem(16) + (var(--col) - 1) * ((100% - rem(32) - rem(36)) / 4 + rem(12)));
@@ -45,53 +45,53 @@
   }
 
   &--2 {
-    background-color: var(--color-light-2);
-    color: var(--color-brown-2);
+    background-color: var(--color-tile-2);
+    color: var(--color-text-primary);
   }
 
   &--4 {
-    background-color: var(--color-light-3);
-    color: var(--color-brown-2);
+    background-color: var(--color-tile-4);
+    color: var(--color-text-primary);
   }
 
   &--8 {
-    background-color: var(--color-orange-1);
+    background-color: var(--color-tile-8);
   }
 
   &--16 {
-    background-color: var(--color-orange-2);
+    background-color: var(--color-tile-16);
   }
 
   &--32 {
-    background-color: var(--color-orange-3);
+    background-color: var(--color-tile-32);
   }
 
   &--64 {
-    background-color: var(--color-orange-4);
+    background-color: var(--color-tile-64);
   }
 
   &--128 {
-    background-color: var(--color-yellow-1);
+    background-color: var(--color-tile-128);
     font-size: rem(28);
   }
 
   &--256 {
-    background-color: var(--color-yellow-2);
+    background-color: var(--color-tile-256);
     font-size: rem(28);
   }
 
   &--528 {
-    background-color: var(--color-yellow-3);
+    background-color: var(--color-tile-512);
     font-size: rem(28);
   }
 
   &--1024 {
-    background-color: var(--color-yellow-4);
+    background-color: var(--color-tile-1024);
     font-size: rem(24);
   }
 
   &--2048 {
-    background-color: var(--color-yellow-5);
+    background-color: var(--color-tile-2048);
     font-size: rem(24);
   }
 }

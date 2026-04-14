@@ -1,3 +1,7 @@
+body {
+  background-color: var(--color-bg-game-page);
+}
+
 .page {
   margin-top: rem(100);
   display: grid;
@@ -7,7 +11,7 @@
 .guide {
   text-align: center;
   font-size: rem(12);
-  color: var(--color-brown-3);
+  color: var(--color-text-muted);
 }
 
 .gameArea {

@@ -1,6 +1,6 @@
 import s from './Button.module.scss'
 
-const Button = (props) => {
+const ActionButton = (props) => {
   const {
     type = 'button',
     className = '',
@@ -19,4 +19,4 @@ const Button = (props) => {
   );
 };
 
-export default Button;
+export default ActionButton;

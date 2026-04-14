@@ -1,8 +1,8 @@
 .board {
-  width: var(--container-width);
+  width: var(--game-container-width);
   height: auto;
   aspect-ratio: 1;
-  background-color: var(--color-brown-3);
+  background-color: var(--color-bg-board);
   border: none;
   border-radius: rem(10);
   display: grid;
@@ -13,7 +13,7 @@
 }
 
 .cell {
-  background-color: var(--color-light-5);
+  background-color: var(--color-bg-tile-empty);
   border-radius: rem(6);
   opacity: 0.3;
 }

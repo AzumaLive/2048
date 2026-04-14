@@ -1,25 +1,38 @@
 :root {
+  /* Backgrounds */
+  --color-bg-menu-page: #FAF7F2;
+  --color-bg-game-page: #f5f0e8;
+  --color-bg-board: #bbada0;
+  --color-bg-tile-empty: #cdc0b4;
+  --color-bg-counter: #bbada0;
+  --color-bg-action-button: #8f7a66;
+  --color-bg-menu-button-classic: #edb563;
+  --color-bg-menu-button-timed: #f29461;
+  --color-bg-menu-button-endless: #f5785e;
+
+  /* Text colors */
+  --color-text-primary: #776e65;
+  --color-text-primary-light: #968c82;
+  --color-text-light: #eee4da;
+  --color-text-on-light: #faf6f2;
+  --color-text-muted: #bbada0;
+
+  /* Tile colors (by value) */
+  --color-tile-2: #eee4da;
+  --color-tile-4: #ede0c8;
+  --color-tile-8: #f2b179;
+  --color-tile-16: #f59563;
+  --color-tile-32: #f67c5f;
+  --color-tile-64: #f65e3b;
+  --color-tile-128: #edcf72;
+  --color-tile-256: #edcc61;
+  --color-tile-512: #edc850;
+  --color-tile-1024: #edc53f;
+  --color-tile-2048: #edc22e;
+
+  /* Utility */
   --color-white: #fff;
-  --color-light-1: #f5f0e8;
-  --color-light-2: #eee4da;
-  --color-light-3: #ede0c8;
-  --color-light-4: #faf6f2;
-  --color-light-5: #cdc0b4;
 
-  --color-orange-1: #f2b179;
-  --color-orange-2: #f59563;
-  --color-orange-3: #f67c5f;
-  --color-orange-4: #f65e3b;
-
-  --color-yellow-1: #edcf72;
-  --color-yellow-2: #edcc61;
-  --color-yellow-3: #edc850;
-  --color-yellow-4: #edc53f;
-  --color-yellow-5: #edc22e;
-
-  --color-brown-1: #8f7a66;
-  --color-brown-2: #776e65;
-  --color-brown-3: #bbada0;
-
-  --container-width: #{rem(470)};
+  --game-container-width: #{rem(470)};
+  --menu-container-width: #{rem(600)};
 }
