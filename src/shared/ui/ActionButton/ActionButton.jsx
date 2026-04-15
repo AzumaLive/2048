@@ -2,7 +2,7 @@ import s from './Button.module.scss'
 
 const ActionButton = (props) => {
   const {
-    type = 'button',
+    type = "button",
     className = '',
     onClick,
     children

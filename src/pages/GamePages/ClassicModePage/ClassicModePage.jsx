@@ -1,8 +1,8 @@
-import GameInfo from "@/widgets/GameInfo";
-import GameBoard from "@/widgets/GameBoard";
-import GameOver from "@/widgets/GameOver";
-import {useGameSession} from "@/features/game-session";
-import s from './ClassicModePage.module.scss'
+import GameInfo from "@/widgets/GameInfo/index.js";
+import GameBoard from "@/widgets/GameBoard/index.js";
+import GameOver from "@/widgets/GameOver/index.js";
+import {useGameSession} from "@/features/game-session/index.js";
+import s from '../styles/GamePage.module.scss'
 
 const ClassicModePage = () => {
   const {

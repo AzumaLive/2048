@@ -1,12 +1,15 @@
 import ActionButton from "@/shared/ui/ActionButton";
-import s from './GameInfo.module.scss'
 import Counter from "@/shared/ui/Counter";
+import Timer from "@/shared/ui/Timer";
+import s from './GameInfo.module.scss'
 
 const GameInfo = (props) => {
   const {
     onReset,
     score,
     bestScore,
+    timer = null,
+    startTimer,
   } = props
 
   return (
@@ -16,8 +19,15 @@ const GameInfo = (props) => {
         <Counter value={score}>SCORE</Counter>
         <Counter value={bestScore}>BEST</Counter>
       </div>
-      <h2 className={s.subtitle}>Join the tiles, get to 2048!</h2>
-      <ActionButton onClick={onReset}>New Game</ActionButton>
+      {timer !== null
+        ? <Timer timer={timer} />
+        : <h2 className={s.subtitle}>Join the tiles, get to 2048!</h2>}
+      <ActionButton
+        onClick={timer !== null ? () => {
+          onReset()
+          startTimer(4)
+        } : onReset}
+      >New Game</ActionButton>
     </div>
   );
 };
