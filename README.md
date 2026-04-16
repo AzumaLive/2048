@@ -22,7 +22,6 @@
 - React Router DOM
 - Vite
 - SASS
-- Feature-Sliced Design
 
 ## Структура проекта
 
