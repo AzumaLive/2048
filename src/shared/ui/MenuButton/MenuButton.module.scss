@@ -1,0 +1,36 @@
+.button {
+  width: var(--menu-container-width);
+  display: inline-flex;
+  align-items: center;
+  padding-block: rem(24);
+  padding-left: rem(40);
+  border-radius: rem(16);
+  border: none;
+  color: var(--color-white);
+}
+
+.info {
+  display: grid;
+  row-gap: rem(8);
+}
+
+.title {
+  font-weight: 700;
+  font-size: rem(32);
+}
+
+.description {
+  font-size: rem(18);
+}
+
+.classicMode {
+  background-color: var(--color-bg-menu-button-classic);
+}
+
+.timeMode {
+  background-color: var(--color-bg-menu-button-timed);
+}
+
+.endlessMode {
+  background-color: var(--color-bg-menu-button-endless);
+}

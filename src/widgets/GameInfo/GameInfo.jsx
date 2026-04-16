@@ -9,8 +9,8 @@ const GameInfo = (props) => {
     score,
     bestScore,
     timer = null,
-    startTimer,
   } = props
+
 
   return (
     <div className={s.gameInfo}>
@@ -23,10 +23,7 @@ const GameInfo = (props) => {
         ? <Timer timer={timer} />
         : <h2 className={s.subtitle}>Join the tiles, get to 2048!</h2>}
       <ActionButton
-        onClick={timer !== null ? () => {
-          onReset()
-          startTimer(4)
-        } : onReset}
+        onClick={onReset}
       >New Game</ActionButton>
     </div>
   );

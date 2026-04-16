@@ -1,0 +1,28 @@
+body {
+  background-color: var(--color-bg-menu-page);
+}
+
+.page {
+  margin-top: rem(80);
+  display: flex;
+  flex-direction: column;
+  row-gap: rem(48);
+  justify-content: start;
+  align-items: center;
+}
+
+.title {
+  color: var(--color-text-primary);
+  font-weight: 700;
+  font-size: rem(100);
+}
+
+.subtitle {
+  font-size: rem(24);
+  color: var(--color-text-primary-light);
+}
+
+.gameModesList {
+  display: grid;
+  row-gap: rem(24);
+}

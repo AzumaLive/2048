@@ -1,0 +1,17 @@
+.button {
+  position: absolute;
+  top: rem(50);
+  left: rem(80);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: rem(16) rem(32);
+  background-color: var(--color-bg-action-button);
+  border-radius: rem(10);
+}
+
+.title {
+  font-weight: 700;
+  font-size: rem(18);
+  color: var(--color-white);
+}

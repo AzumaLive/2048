@@ -1,0 +1,22 @@
+.timer {
+  background-color: var(--color-bg-counter);
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+  gap: rem(8);
+  padding: rem(14) rem(28);
+  border-radius: rem(10);
+  border: none;
+  color: var(--color-white);
+}
+
+.info {
+  display: flex;
+  align-items: center;
+  font-size: rem(18);
+}
+
+.time {
+  font-weight: 700;
+  font-size: rem(26);
+}
