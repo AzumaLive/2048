@@ -19,7 +19,7 @@ const useGameTime = () => {
   } = useGameSession(STORAGE_KEY)
 
   const savedTimer = loadSavedTimer(STORAGE_KEY).timer
-  const initialTime = savedTimer !== null && savedTimer >= 0 ? savedTimer : 10
+  const initialTime = savedTimer !== null && savedTimer >= 0 ? savedTimer : 60
 
   const { timer, startTimer } = useTimer(initialTime)
 
@@ -31,7 +31,7 @@ const useGameTime = () => {
 
   const reset = () => {
     resetGame()
-    startTimer(10)
+    startTimer(60)
   }
 
   const isOver = isGameOver || timer === 0

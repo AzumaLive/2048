@@ -1,16 +1,39 @@
-# React + Vite
+# 2048
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Учебный проект — реализация популярной игры 2048 на React с тремя игровыми режимами.
 
-Currently, two official plugins are available:
+## Демо
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+[Играть онлайн](https://AzumaLive.github.io/2048)
 
-## React Compiler
+## Возможности
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+- **Три режима игры:**
+  - Классический — стандартная игра 4×4
+  - На время — набери максимум очков за 1 минуту
+  - Бесконечный — играй без ограничений
+- Сохранение прогресса в localStorage
+- Плавные анимации
+- Управление стрелками клавиатуры
 
-## Expanding the ESLint configuration
+## Технологии
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+- React 19
+- React Router DOM
+- Vite
+- SASS
+- Feature-Sliced Design
+
+## Структура проекта
+
+Проект организован по методологии Feature-Sliced Design:
+
+```
+src/
+├── app/           # Инициализация приложения, роутинг, глобальные стили
+├── pages/         # Страницы приложения
+├── widgets/       # Композитные блоки (игровое поле, информация)
+├── features/      # Игровая логика (движение, слияние, сохранение)
+├── entities/      # Бизнес-сущности (доска, плитки)
+└── shared/        # Переиспользуемый код (UI, утилиты)
+```

@@ -22,7 +22,7 @@ const MainMenuPage = () => {
             className="timeMode"
             path="/game/time"
             name="На время"
-            description="Набери максимум очков за 3 минуты"
+            description="Набери максимум очков за 1 минуту"
           ></MenuButton>
         </li>
         <li>
